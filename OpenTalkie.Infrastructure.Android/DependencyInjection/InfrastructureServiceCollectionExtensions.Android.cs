@@ -16,6 +16,7 @@ public static class AndroidInfrastructureServiceCollectionExtensions
         services.AddSingleton<IMicrophoneRepository, MicrophoneRepository>();
         services.AddSingleton<IPlaybackRepository, PlaybackRepository>();
         services.AddSingleton<IReceiverRepository, ReceiverRepository>();
+        services.AddSingleton<IAudioManagerSettingsRepository, AudioManagerSettingsRepository>();
 
         services.AddSingleton<IMicrophoneCapturingService, MicrophoneCapturingService>();
         services.AddSingleton<IPlaybackService, PlaybackService>();

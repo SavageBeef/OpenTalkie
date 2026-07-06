@@ -16,6 +16,11 @@ public enum PlaybackSettingOption
     Encoding
 }
 
+public enum AudioManagerSettingOption
+{
+    Mode
+}
+
 public readonly record struct SettingOptionItem(string Value, string DisplayName)
 {
     public override string ToString() => DisplayName;
@@ -40,3 +45,6 @@ public readonly record struct PlaybackSettingsState(
 public readonly record struct ReceiverSettingsState(
     float VolumeGain,
     SettingOptionItem PreferredAudioOutputDevice);
+
+public readonly record struct AudioManagerSettingsState(
+    SettingOptionItem SelectedMode);

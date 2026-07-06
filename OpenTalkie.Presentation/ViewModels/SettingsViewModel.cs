@@ -23,14 +23,16 @@ public partial class SettingsViewModel : ObservableObject
     {
         _navigationService = navigationService;
 
-        SettingsItems = new ObservableCollection<SettingsItem>
-        {
-            new SettingsItem { Name = "Microphone Settings", Route = "MicSettingsPage" },
-            new SettingsItem { Name = "Receiver Settings", Route = "ReceiverSettingsPage" },
-        };
+        SettingsItems =
+        [
+            new() { Name = "Microphone Settings", Route = "MicSettingsPage" },
+            new() { Name = "Receiver Settings", Route = "ReceiverSettingsPage" },
+        ];
 
         if (platformCapabilitiesService.GetCapabilities().IsPlaybackCaptureSupported)
             SettingsItems.Add(new SettingsItem { Name = "Cast Settings", Route = "PlaybackSettingsPage" });
+
+        SettingsItems.Add(new SettingsItem { Name = "Audio Manager Settings", Route = "AudioManagerSettingsPage" });
     }
 
     [RelayCommand]

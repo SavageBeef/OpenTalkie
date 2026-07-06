@@ -5,7 +5,7 @@ using OpenTalkie.Application.Abstractions.Services;
 
 namespace OpenTalkie.Infrastructure.Android.Platforms.Android.Infrastructure.Services.Output;
 
-public class AudioOutputService(IReceiverRepository receiverRepository) : IAudioOutputService
+public class AudioOutputService(IReceiverRepository receiverRepository, IAudioManagerSettingsRepository audioManagerSettingsRepository) : IAudioOutputService
 {
     private AudioTrack? _track;
     private int _sampleRate;
@@ -31,9 +31,17 @@ public class AudioOutputService(IReceiverRepository receiverRepository) : IAudio
         int minBuf = AudioTrack.GetMinBufferSize(sampleRate, channelOut, encoding);
         if (minBuf <= 0) minBuf = sampleRate * channels * 2;
 
+        var configuredMode = GetConfiguredAudioManagerMode();
+        bool isInCommunication = configuredMode == Mode.InCommunication;
+
         var attrsBuilder = new AudioAttributes.Builder();
-        attrsBuilder = attrsBuilder.SetUsage(AudioUsageKind.Media) ?? throw new InvalidOperationException("Could not configure audio usage.");
-        attrsBuilder = attrsBuilder.SetContentType(AudioContentType.Music) ?? throw new InvalidOperationException("Could not configure audio content type.");
+
+        attrsBuilder = attrsBuilder.SetUsage(isInCommunication ? AudioUsageKind.VoiceCommunication : AudioUsageKind.Media) 
+            ?? throw new InvalidOperationException("Could not configure audio usage.");
+
+        attrsBuilder = attrsBuilder.SetContentType(isInCommunication ? AudioContentType.Speech : AudioContentType.Music) 
+            ?? throw new InvalidOperationException("Could not configure audio content type.");
+
         var attrs = attrsBuilder.Build() ?? throw new InvalidOperationException("Could not build audio attributes.");
 
         var formatBuilder = new AudioFormat.Builder();
@@ -104,14 +112,14 @@ public class AudioOutputService(IReceiverRepository receiverRepository) : IAudio
                 audioManager.StopBluetoothSco();
             }
 
-            audioManager.Mode = Mode.Normal;
+            audioManager.Mode = GetConfiguredAudioManagerMode();
             return true;
         }
 
         if (!Enum.TryParse<AudioDeviceType>(preferredDevice, ignoreCase: true, out var wantedType))
             return false;
 
-        audioManager.Mode = Mode.InCommunication;
+        audioManager.Mode = GetConfiguredAudioManagerMode();
 
         AudioDeviceInfo? target = null;
 
@@ -147,5 +155,10 @@ public class AudioOutputService(IReceiverRepository receiverRepository) : IAudio
 
         _track?.SetPreferredDevice(target);
         return true;
+    }
+
+    private Mode GetConfiguredAudioManagerMode()
+    {
+        return Enum.Parse<Mode>(audioManagerSettingsRepository.GetSettings().SelectedMode.Value);
     }
 }

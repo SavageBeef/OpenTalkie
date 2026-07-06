@@ -1,6 +1,5 @@
 using OpenTalkie.Application.Abstractions.Repositories;
 using OpenTalkie.Application.Abstractions.Services;
-using OpenTalkie.Domain.Models;
 
 namespace OpenTalkie.Infrastructure.Android.Platforms.Android.Infrastructure.Services.Microphone;
 
@@ -8,9 +7,11 @@ public class MicrophoneCapturingService : IMicrophoneCapturingService
 {
     public Action<bool>? OnServiceStateChange { get; set; }
 
-    public MicrophoneCapturingService(IMicrophoneRepository microphoneRepository)
+    public MicrophoneCapturingService(
+        IMicrophoneRepository microphoneRepository,
+        IAudioManagerSettingsRepository audioManagerSettingsRepository)
     {
-        MicrophoneAudioRecord.Configure(microphoneRepository);
+        MicrophoneAudioRecord.Configure(microphoneRepository, audioManagerSettingsRepository);
         microphoneRepository.PreferredAudioInputDeviceChanged += MicrophoneAudioRecord.SetPreferredAudioDevice;
     }
 
@@ -39,10 +40,8 @@ public class MicrophoneCapturingService : IMicrophoneCapturingService
         OnServiceStateChange?.Invoke(false);
     }
 
-    public async Task<int> ReadAsync(byte[] buffer, int offset, int count)
-    {
-        return await MicrophoneAudioRecord.ReadAsync(buffer, offset, count);
-    }
+    public async Task<int> ReadAsync(byte[] buffer, int offset, int count) => 
+        await MicrophoneAudioRecord.ReadAsync(buffer, offset, count);
 
     public int GetBufferSize() => MicrophoneAudioRecord.BufferSize;
 

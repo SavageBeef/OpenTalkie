@@ -1,4 +1,3 @@
-using Microsoft.Maui.Controls;
 using OpenTalkie.Application.Abstractions.Services;
 using OpenTalkie.Presentation.Views;
 
@@ -18,5 +17,6 @@ public partial class AppShell : Shell
         Routing.RegisterRoute("MicSettingsPage", typeof(MicSettingsPage));
         Routing.RegisterRoute("PlaybackSettingsPage", typeof(PlaybackSettingsPage));
         Routing.RegisterRoute("ReceiverSettingsPage", typeof(ReceiverSettingsPage));
+        Routing.RegisterRoute("AudioManagerSettingsPage", typeof(AudioManagerSettingsPage));
     }
 }

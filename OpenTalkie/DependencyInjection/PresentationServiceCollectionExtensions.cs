@@ -23,6 +23,7 @@ public static class PresentationServiceCollectionExtensions
         services.AddTransient<MicSettingsPage>();
         services.AddTransient<PlaybackSettingsPage>();
         services.AddTransient<ReceiverSettingsPage>();
+        services.AddTransient<AudioManagerSettingsPage>();
         services.AddTransient<SettingsPage>();
         services.AddTransient<AddStreamPage>();
 

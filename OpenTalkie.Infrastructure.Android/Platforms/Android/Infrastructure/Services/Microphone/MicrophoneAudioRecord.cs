@@ -1,14 +1,14 @@
 using Android.Content;
 using Android.Media;
 using OpenTalkie.Application.Abstractions.Repositories;
-using OpenTalkie.Domain.Models;
 
 namespace OpenTalkie.Infrastructure.Android.Platforms.Android.Infrastructure.Services.Microphone;
 
 public static class MicrophoneAudioRecord
 {
-    private static readonly object _repoLock = new();
+    private static readonly Lock _repoLock = new();
     private static IMicrophoneRepository? _microphoneRepository;
+    private static IAudioManagerSettingsRepository? _audioManagerSettingsRepository;
     private static bool _volumeSubscriptionAttached;
     private static float _volume;
     private static AudioRecord? _audioRecord;
@@ -19,11 +19,14 @@ public static class MicrophoneAudioRecord
     private static WaveFormat? _waveFormat;
     public static int BufferSize { get; set; }
 
-    public static void Configure(IMicrophoneRepository microphoneRepository)
+    public static void Configure(
+        IMicrophoneRepository microphoneRepository,
+        IAudioManagerSettingsRepository audioManagerSettingsRepository)
     {
         lock (_repoLock)
         {
-            if (ReferenceEquals(_microphoneRepository, microphoneRepository))
+            if (ReferenceEquals(_microphoneRepository, microphoneRepository)
+                && ReferenceEquals(_audioManagerSettingsRepository, audioManagerSettingsRepository))
             {
                 return;
             }
@@ -34,6 +37,7 @@ public static class MicrophoneAudioRecord
             }
 
             _microphoneRepository = microphoneRepository;
+            _audioManagerSettingsRepository = audioManagerSettingsRepository;
             _microphoneRepository.VolumeChanged += OnVolumeChange;
             _volumeSubscriptionAttached = true;
         }
@@ -189,14 +193,14 @@ public static class MicrophoneAudioRecord
                 audioManager.StopBluetoothSco();
             }
 
-            audioManager.Mode = Mode.Normal;
+            audioManager.Mode = GetConfiguredAudioManagerMode();
             return;
         }
 
         if (!Enum.TryParse<AudioDeviceType>(preferredDevice, ignoreCase: true, out var wantedType))
             return;
 
-        audioManager.Mode = Mode.InCommunication;
+        audioManager.Mode = GetConfiguredAudioManagerMode();
 
         AudioDeviceInfo? target = null;
 
@@ -243,5 +247,13 @@ public static class MicrophoneAudioRecord
             32 => OperatingSystem.IsAndroidVersionAtLeast(31) ? Encoding.Pcm32bit : throw new NotSupportedException("Pcm32bit supported on sdk 31 or higher"),
             _ => throw new NotSupportedException($"No such encoding supported: {encoding}")
         };
+    }
+
+    private static Mode GetConfiguredAudioManagerMode()
+    {
+        var settings = _audioManagerSettingsRepository?.GetSettings()
+            ?? throw new InvalidOperationException("Audio manager settings repository service is unavailable.");
+
+        return Enum.Parse<Mode>(settings.SelectedMode.Value);
     }
 }
