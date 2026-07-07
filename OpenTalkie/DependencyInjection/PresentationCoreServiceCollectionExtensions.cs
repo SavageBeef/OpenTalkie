@@ -1,5 +1,4 @@
 using OpenTalkie.Presentation.ViewModels;
-using OpenTalkie.ViewModels;
 
 namespace OpenTalkie.DependencyInjection;
 
