@@ -1,6 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using OpenTalkie.Domain.Enums;
-using OpenTalkie.Domain.Models;
 using OpenTalkie.Domain.VBAN;
 
 namespace OpenTalkie.Presentation.ViewModels;

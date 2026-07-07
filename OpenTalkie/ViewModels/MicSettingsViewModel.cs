@@ -1,10 +1,9 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Mediator;
-using OpenTalkie.Application.Settings;
+using OpenTalkie.Abstractions.Services;
 using OpenTalkie.Application.Settings.Commands;
 using OpenTalkie.Application.Settings.Queries;
-using OpenTalkie.Presentation.Abstractions.Services;
 
 namespace OpenTalkie.Presentation.ViewModels;
 
@@ -56,10 +55,9 @@ public partial class MicSettingsViewModel : ObservableObject
     private async Task EditField(string fieldName)
     {
         var option = MapOption(fieldName);
+
         if (option == null)
-        {
             return;
-        }
 
         var options = await _mediator.Send(new GetMicrophoneSettingOptionsQuery(option.Value));
         var currentValue = GetCurrentValue(option.Value);
@@ -71,10 +69,9 @@ public partial class MicSettingsViewModel : ObservableObject
             async result =>
             {
                 var selectedOption = options.FirstOrDefault(item => item.DisplayName == result);
+
                 if (string.IsNullOrWhiteSpace(selectedOption.Value) || selectedOption.DisplayName == currentValue)
-                {
                     return;
-                }
 
                 var updateResult = await _mediator.Send(new SetMicrophoneSettingOptionCommand(option.Value, selectedOption.Value));
                 if (!updateResult.IsSuccess)

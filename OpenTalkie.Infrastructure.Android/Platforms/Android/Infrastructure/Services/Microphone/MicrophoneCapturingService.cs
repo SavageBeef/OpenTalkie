@@ -40,7 +40,7 @@ public class MicrophoneCapturingService : IMicrophoneCapturingService
         OnServiceStateChange?.Invoke(false);
     }
 
-    public async Task<int> ReadAsync(byte[] buffer, int offset, int count) => 
+    public async Task<int> ReadAsync(byte[] buffer, int offset, int count) =>
         await MicrophoneAudioRecord.ReadAsync(buffer, offset, count);
 
     public int GetBufferSize() => MicrophoneAudioRecord.BufferSize;

@@ -1,7 +1,7 @@
-using Microsoft.Extensions.DependencyInjection;
 using OpenTalkie.Presentation.ViewModels;
+using OpenTalkie.ViewModels;
 
-namespace OpenTalkie.Presentation.DependencyInjection;
+namespace OpenTalkie.DependencyInjection;
 
 public static class PresentationCoreServiceCollectionExtensions
 {

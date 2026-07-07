@@ -46,21 +46,17 @@ public class EndpointRepository : IEndpointRepository
         persistedEndpoints.Remove(endpoint);
 
         var filePath = Path.Combine(endpointDirectory, $"{endpoint.Id}.json");
+
         if (File.Exists(filePath))
-        {
             File.Delete(filePath);
-        }
 
         await SaveAsync();
     }
 
     public async Task UpdateAsync(Endpoint endpoint)
     {
-        var existing = persistedEndpoints.FirstOrDefault(e => e.Id == endpoint.Id);
-        if (existing == null)
-        {
-            throw new Exception($"Endpoint with id {endpoint.Id} not found");
-        }
+        var existing = persistedEndpoints.FirstOrDefault(e => e.Id == endpoint.Id)
+            ?? throw new Exception($"Endpoint with id {endpoint.Id} not found");
 
         var candidate = ToPersisted(endpoint);
         EnsureNoIdentityCollision(candidate, excludingEndpointId: endpoint.Id);
@@ -84,9 +80,7 @@ public class EndpointRepository : IEndpointRepository
         {
             var existing = persistedEndpoints[i];
             if (excludingEndpointId.HasValue && existing.Id == excludingEndpointId.Value)
-            {
                 continue;
-            }
 
             if (EndpointIdentityRules.Collides(
                 candidate.Type,
@@ -106,9 +100,7 @@ public class EndpointRepository : IEndpointRepository
     private async Task SaveAsync()
     {
         if (!Directory.Exists(endpointDirectory))
-        {
             Directory.CreateDirectory(endpointDirectory);
-        }
 
         for (var i = 0; i < persistedEndpoints.Count; i++)
         {
@@ -122,19 +114,16 @@ public class EndpointRepository : IEndpointRepository
     private void Load()
     {
         if (!Directory.Exists(endpointDirectory))
-        {
             return;
-        }
 
         var filePaths = Directory.EnumerateFiles(endpointDirectory).ToList();
         for (var i = 0; i < filePaths.Count; i++)
         {
             var file = File.ReadAllText(filePaths[i]);
             var persisted = JsonSerializer.Deserialize(file, EndpointJsonSerializerContext.Default.PersistedEndpoint);
+
             if (persisted != null)
-            {
                 persistedEndpoints.Add(persisted);
-            }
         }
     }
 

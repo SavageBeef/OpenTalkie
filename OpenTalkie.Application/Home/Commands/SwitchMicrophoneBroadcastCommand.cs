@@ -17,9 +17,7 @@ public sealed class SwitchMicrophoneBroadcastCommandHandler(
         if (microphoneBroadcastService.Status.Phase is StreamSessionPhase.Stopped or StreamSessionPhase.Faulted)
         {
             if (!await microphonePermissionService.RequestMicrophonePermissionAsync())
-            {
                 return OperationResult.Fail("Microphone permission denied");
-            }
         }
 
         return await microphoneBroadcastService.SwitchAsync();

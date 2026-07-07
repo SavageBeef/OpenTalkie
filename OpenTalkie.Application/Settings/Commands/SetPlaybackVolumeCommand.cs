@@ -13,10 +13,9 @@ public sealed class SetPlaybackVolumeCommandHandler(IPlaybackRepository reposito
         CancellationToken cancellationToken)
     {
         OperationResult validation = SettingsValidation.ValidateVolume(command.VolumeGain);
+
         if (!validation.IsSuccess)
-        {
             return ValueTask.FromResult(validation);
-        }
 
         repository.SetSelectedVolume(command.VolumeGain);
         return ValueTask.FromResult(OperationResult.Success());

@@ -1,10 +1,10 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Mediator;
+using OpenTalkie.Abstractions.Services;
 using OpenTalkie.Application.Abstractions.Services;
 using OpenTalkie.Application.Streams.Commands;
 using OpenTalkie.Domain.Enums;
-using OpenTalkie.Presentation.Abstractions.Services;
 using System.Collections.ObjectModel;
 
 namespace OpenTalkie.Presentation.ViewModels;
@@ -52,15 +52,12 @@ public abstract partial class StreamEndpointsViewModelBase : ObservableObject
     private async Task DeleteStream(StreamEndpointItemViewModel endpoint)
     {
         if (endpoint == null)
-        {
             return;
-        }
 
         var result = await _mediator.Send(new DeleteStreamEndpointCommand(_streamType, endpoint.EndpointId));
+
         if (!result.IsSuccess)
-        {
             await _dialogService.ShowErrorAsync(result.ErrorMessage ?? "Failed to delete stream endpoint.");
-        }
     }
 
     [RelayCommand]
@@ -76,9 +73,7 @@ public abstract partial class StreamEndpointsViewModelBase : ObservableObject
     private async Task StreamEnabledChanged(StreamEndpointItemViewModel endpoint)
     {
         if (endpoint == null)
-        {
             return;
-        }
 
         bool previousEnabledState = GetKnownEnabledState(endpoint);
         var result = await _mediator.Send(new UpdateStreamEndpointCommand(
@@ -100,9 +95,7 @@ public abstract partial class StreamEndpointsViewModelBase : ObservableObject
     private async Task StreamVolumeChanged(StreamEndpointItemViewModel endpoint)
     {
         if (endpoint == null)
-        {
             return;
-        }
 
         float previousVolume = GetKnownVolume(endpoint);
         var result = await _mediator.Send(new UpdateStreamEndpointCommand(
@@ -124,9 +117,7 @@ public abstract partial class StreamEndpointsViewModelBase : ObservableObject
     private async Task ResetVolume(StreamEndpointItemViewModel endpoint)
     {
         if (endpoint == null)
-        {
             return;
-        }
 
         float previousVolume = GetKnownVolume(endpoint);
         var result = await _mediator.Send(new UpdateStreamEndpointCommand(
@@ -135,13 +126,9 @@ public abstract partial class StreamEndpointsViewModelBase : ObservableObject
             Volume: 1f));
 
         if (!result.IsSuccess)
-        {
             endpoint.Volume = previousVolume;
-        }
         else
-        {
             _lastKnownVolume[endpoint.EndpointId] = 1f;
-        }
 
         await ShowUpdateErrorIfFailedAsync(result, _dialogService);
     }
@@ -149,9 +136,7 @@ public abstract partial class StreamEndpointsViewModelBase : ObservableObject
     private void OnEndpointsChanged(EndpointType endpointType)
     {
         if (endpointType == _streamType)
-        {
             ReloadEndpoints();
-        }
     }
 
     private void ReloadEndpoints()
@@ -173,9 +158,7 @@ public abstract partial class StreamEndpointsViewModelBase : ObservableObject
     private bool GetKnownEnabledState(StreamEndpointItemViewModel endpoint)
     {
         if (_lastKnownEnabledState.TryGetValue(endpoint.EndpointId, out bool value))
-        {
             return value;
-        }
 
         _lastKnownEnabledState[endpoint.EndpointId] = endpoint.IsEnabled;
         return endpoint.IsEnabled;
@@ -184,9 +167,7 @@ public abstract partial class StreamEndpointsViewModelBase : ObservableObject
     private float GetKnownVolume(StreamEndpointItemViewModel endpoint)
     {
         if (_lastKnownVolume.TryGetValue(endpoint.EndpointId, out float value))
-        {
             return value;
-        }
 
         _lastKnownVolume[endpoint.EndpointId] = endpoint.Volume;
         return endpoint.Volume;
@@ -195,9 +176,7 @@ public abstract partial class StreamEndpointsViewModelBase : ObservableObject
     private static async Task ShowUpdateErrorIfFailedAsync(OperationResult result, IUserDialogService dialogService)
     {
         if (result.IsSuccess)
-        {
             return;
-        }
 
         await dialogService.ShowErrorAsync(result.ErrorMessage ?? "Failed to update stream endpoint.");
     }

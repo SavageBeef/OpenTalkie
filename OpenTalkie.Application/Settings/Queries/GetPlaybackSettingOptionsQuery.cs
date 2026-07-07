@@ -9,9 +9,7 @@ public readonly record struct GetPlaybackSettingOptionsQuery(PlaybackSettingOpti
 public sealed class GetPlaybackSettingOptionsQueryHandler(IPlaybackRepository repository)
     : IQueryHandler<GetPlaybackSettingOptionsQuery, IReadOnlyList<SettingOptionItem>>
 {
-    public ValueTask<IReadOnlyList<SettingOptionItem>> Handle(
-        GetPlaybackSettingOptionsQuery query,
-        CancellationToken cancellationToken)
+    public ValueTask<IReadOnlyList<SettingOptionItem>> Handle(GetPlaybackSettingOptionsQuery query, CancellationToken cancellationToken)
     {
         return ValueTask.FromResult(repository.GetOptions(query.Option));
     }

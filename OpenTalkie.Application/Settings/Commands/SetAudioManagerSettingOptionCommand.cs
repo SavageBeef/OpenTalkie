@@ -14,10 +14,9 @@ public sealed class SetAudioManagerSettingOptionCommandHandler(IAudioManagerSett
         CancellationToken cancellationToken)
     {
         OperationResult validation = SettingsValidation.ValidateNotEmpty(command.Value, "Setting value");
+
         if (!validation.IsSuccess)
-        {
             return ValueTask.FromResult(validation);
-        }
 
         repository.SetOption(command.Option, command.Value);
         return ValueTask.FromResult(OperationResult.Success());

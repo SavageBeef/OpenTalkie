@@ -47,9 +47,7 @@ public partial class EditFieldViewModel : ObservableObject
     private async Task Save()
     {
         if (_onSave != null)
-        {
             await _onSave.Invoke(Value);
-        }
 
         await _popup.CloseAsync();
     }

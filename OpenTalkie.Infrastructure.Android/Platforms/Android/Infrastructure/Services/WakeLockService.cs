@@ -18,8 +18,8 @@ public class WakeLockService : Java.Lang.Object, IWakeLockService
     {
         if (_wakeLock != null && _wakeLock.IsHeld) return;
 
-        var powerManager = Platform.CurrentActivity?.GetSystemService(Context.PowerService) as PowerManager;
-        if (powerManager == null) return;
+        if (Platform.CurrentActivity?.GetSystemService(Context.PowerService) is not PowerManager powerManager) 
+            return;
 
         _wakeLock = powerManager.NewWakeLock(WakeLockFlags.Partial, Tag);
         _wakeLock?.Acquire();

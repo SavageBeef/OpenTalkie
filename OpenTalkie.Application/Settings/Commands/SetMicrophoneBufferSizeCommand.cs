@@ -12,9 +12,7 @@ public sealed class SetMicrophoneBufferSizeCommandHandler(IMicrophoneRepository 
     public ValueTask<OperationResult> Handle(SetMicrophoneBufferSizeCommand command, CancellationToken cancellationToken)
     {
         if (command.Value <= 0)
-        {
             return ValueTask.FromResult(OperationResult.Fail("Buffer size must be greater than zero."));
-        }
 
         repository.SetBufferSize(command.Value);
         return ValueTask.FromResult(OperationResult.Success());

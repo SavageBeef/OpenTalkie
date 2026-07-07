@@ -1,5 +1,3 @@
-using OpenTalkie.Application.Streams;
-
 namespace OpenTalkie.Application.Abstractions.Services;
 
 public interface IMicrophoneBroadcastService

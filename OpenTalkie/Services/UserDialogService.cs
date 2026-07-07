@@ -1,5 +1,4 @@
-using Microsoft.Maui;
-using OpenTalkie.Presentation.Abstractions.Services;
+using OpenTalkie.Abstractions.Services;
 using OpenTalkie.Presentation.Views.Popups;
 using OpenTalkie.Views;
 

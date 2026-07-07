@@ -32,14 +32,10 @@ public sealed class MicrophoneBroadcastService : IMicrophoneBroadcastService
     public async Task<OperationResult> SwitchAsync()
     {
         if (_status.Phase is StreamSessionPhase.Starting or StreamSessionPhase.Stopping)
-        {
             return OperationResult.Fail("Microphone broadcast is already transitioning.");
-        }
 
         if (_status.Phase == StreamSessionPhase.Running)
-        {
             return await StopAsync();
-        }
 
         return await StartAsync();
     }
@@ -76,11 +72,24 @@ public sealed class MicrophoneBroadcastService : IMicrophoneBroadcastService
         SetStatus(StreamSessionStatus.Stopping());
 
         _cancellationTokenSource?.Cancel();
-        try { _microphoneService.Stop(); } catch { }
+
+        try
+        {
+            _microphoneService.Stop();
+        }
+        catch
+        {
+        }
 
         if (_sendLoopTask != null)
         {
-            try { await _sendLoopTask; } catch { }
+            try
+            {
+                await _sendLoopTask;
+            }
+            catch
+            {
+            }
         }
 
         _asyncSender?.Dispose();
@@ -96,9 +105,7 @@ public sealed class MicrophoneBroadcastService : IMicrophoneBroadcastService
     private async Task StartSendingLoopAsync(CancellationToken cancellationToken)
     {
         if (_asyncSender == null)
-        {
             return;
-        }
 
         try
         {
@@ -109,9 +116,7 @@ public sealed class MicrophoneBroadcastService : IMicrophoneBroadcastService
             byte[] vbanBuffer = new byte[bufferSize];
 
             while (!cancellationToken.IsCancellationRequested)
-            {
                 await _asyncSender.ReadAsync(vbanBuffer, 0, vbanBuffer.Length);
-            }
         }
         catch (OperationCanceledException)
         {
@@ -119,9 +124,7 @@ public sealed class MicrophoneBroadcastService : IMicrophoneBroadcastService
         catch (Exception ex)
         {
             if (cancellationToken.IsCancellationRequested)
-            {
                 return;
-            }
 
             try { _microphoneService.Stop(); } catch { }
             SetStatus(StreamSessionStatus.Faulted(ex.Message));
@@ -131,19 +134,16 @@ public sealed class MicrophoneBroadcastService : IMicrophoneBroadcastService
     private void OnEndpointsChanged(EndpointType endpointType)
     {
         if (endpointType == EndpointType.Microphone)
-        {
             SyncEndpoints();
-        }
     }
 
     private void SyncEndpoints()
     {
         var endpoints = _endpointCatalogService.GetEndpoints(EndpointType.Microphone);
         _endpoints.Clear();
+
         for (int i = 0; i < endpoints.Count; i++)
-        {
             _endpoints.Add(endpoints[i]);
-        }
     }
 
     private void SetStatus(StreamSessionStatus status)

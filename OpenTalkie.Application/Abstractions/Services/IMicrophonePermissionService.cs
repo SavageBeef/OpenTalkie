@@ -4,4 +4,3 @@ public interface IMicrophonePermissionService
 {
     Task<bool> RequestMicrophonePermissionAsync();
 }
-

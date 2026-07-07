@@ -35,9 +35,7 @@ public sealed class PlaybackBroadcastService : IPlaybackBroadcastService
     public OperationResult Switch()
     {
         if (_status.Phase is StreamSessionPhase.Starting or StreamSessionPhase.Stopping)
-        {
             return OperationResult.Fail("Playback broadcast is already transitioning.");
-        }
 
         return _status.Phase == StreamSessionPhase.Running
             ? Stop()
@@ -88,9 +86,7 @@ public sealed class PlaybackBroadcastService : IPlaybackBroadcastService
     private async Task StartSendingLoopAsync(CancellationToken cancellationToken)
     {
         if (_asyncSender == null)
-        {
             return;
-        }
 
         try
         {
@@ -101,9 +97,7 @@ public sealed class PlaybackBroadcastService : IPlaybackBroadcastService
             byte[] vbanBuffer = new byte[bufferSize];
 
             while (!cancellationToken.IsCancellationRequested)
-            {
                 await _asyncSender.ReadAsync(vbanBuffer, 0, vbanBuffer.Length);
-            }
         }
         catch (OperationCanceledException)
         {
@@ -118,19 +112,16 @@ public sealed class PlaybackBroadcastService : IPlaybackBroadcastService
     private void OnEndpointsChanged(EndpointType endpointType)
     {
         if (endpointType == EndpointType.Playback)
-        {
             SyncEndpoints();
-        }
     }
 
     private void SyncEndpoints()
     {
         var endpoints = _endpointCatalogService.GetEndpoints(EndpointType.Playback);
         _endpoints.Clear();
+
         for (int i = 0; i < endpoints.Count; i++)
-        {
             _endpoints.Add(endpoints[i]);
-        }
     }
 
     private void SetStatus(StreamSessionStatus status)

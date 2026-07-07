@@ -5,7 +5,7 @@ namespace OpenTalkie.Infrastructure.Services;
 
 public sealed class DenoiseAvailabilityService : IDenoiseAvailabilityService
 {
-    private readonly object _sync = new();
+    private readonly Lock _sync = new();
     private bool _initialized;
     private OperationResult _cachedResult;
 

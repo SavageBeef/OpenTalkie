@@ -12,7 +12,7 @@ namespace OpenTalkie.Infrastructure.Streaming;
 public class AsyncReceiver : IDisposable
 {
     private readonly ObservableCollection<Endpoint> _endpoints;
-    private readonly Dictionary<int, Listener> _listeners = new();
+    private readonly Dictionary<int, Listener> _listeners = [];
     private bool _started;
 
     public AsyncReceiver(ObservableCollection<Endpoint> endpoints)

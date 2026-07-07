@@ -20,22 +20,18 @@ public sealed class ReceiverRepository : IReceiverRepository
     public IReadOnlyList<SettingOptionItem> GetAudioOutputOptions()
     {
         if (!OperatingSystem.IsAndroidVersionAtLeast(23))
-        {
             return [CreateOption("Default")];
-        }
 
         var context = Platform.AppContext;
         var audioManager = (AudioManager?)context.GetSystemService(Context.AudioService);
+
         if (audioManager == null)
-        {
             return [CreateOption("Default")];
-        }
 
         var devices = audioManager.GetDevices(GetDevicesTargets.Outputs);
+
         if (devices is null)
-        {
             return [CreateOption("Default")];
-        }
 
         return [.. Enumerable.Concat([CreateOption("Default")], devices.Select(device => CreateOption(device.Type.ToString())))];
     }
@@ -43,9 +39,7 @@ public sealed class ReceiverRepository : IReceiverRepository
     public void SetPreferredDevice(string preferredDevice)
     {
         if (string.IsNullOrWhiteSpace(preferredDevice))
-        {
             return;
-        }
 
         Preferences.Set("ReceiverPrefferedAudioOutputDevice", preferredDevice);
         PreferredAudioOutputDeviceChanged?.Invoke(preferredDevice);

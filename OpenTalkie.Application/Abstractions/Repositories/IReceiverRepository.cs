@@ -1,5 +1,3 @@
-using OpenTalkie.Application.Settings;
-
 namespace OpenTalkie.Application.Abstractions.Repositories;
 
 public interface IReceiverRepository

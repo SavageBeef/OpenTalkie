@@ -18,9 +18,7 @@ internal sealed class EndpointRuntimeRegistry : IDisposable
         Connectivity.ConnectivityChanged += OnConnectivityChanged;
 
         for (var i = 0; i < _endpoints.Count; i++)
-        {
             RegisterEndpoint(_endpoints[i]);
-        }
     }
 
     public EndpointRuntime GetRuntime(Endpoint endpoint)
@@ -42,19 +40,17 @@ internal sealed class EndpointRuntimeRegistry : IDisposable
         Connectivity.ConnectivityChanged -= OnConnectivityChanged;
 
         var runtimes = _runtimes.Values.ToArray();
+
         for (var i = 0; i < runtimes.Length; i++)
-        {
             runtimes[i].Dispose();
-        }
 
         _runtimes.Clear();
     }
 
     private void RegisterEndpoint(Endpoint endpoint)
     {
-        if (_runtimes.ContainsKey(endpoint.Id))
+        if (_runtimes.TryGetValue(endpoint.Id, out EndpointRuntime? existing))
         {
-            var existing = _runtimes[endpoint.Id];
             existing.UpdateName(endpoint.Name);
             existing.Reconnect(endpoint.Hostname, endpoint.Port);
             return;
@@ -80,30 +76,22 @@ internal sealed class EndpointRuntimeRegistry : IDisposable
         if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems != null)
         {
             for (var i = 0; i < e.NewItems.Count; i++)
-            {
                 RegisterEndpoint((Endpoint)e.NewItems[i]!);
-            }
         }
 
         if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems != null)
         {
             for (var i = 0; i < e.OldItems.Count; i++)
-            {
                 UnregisterEndpoint((Endpoint)e.OldItems[i]!);
-            }
         }
 
         if (e.Action == NotifyCollectionChangedAction.Replace && e.OldItems != null && e.NewItems != null)
         {
             for (var i = 0; i < e.OldItems.Count; i++)
-            {
                 UnregisterEndpoint((Endpoint)e.OldItems[i]!);
-            }
 
             for (var i = 0; i < e.NewItems.Count; i++)
-            {
                 RegisterEndpoint((Endpoint)e.NewItems[i]!);
-            }
         }
 
         if (e.Action == NotifyCollectionChangedAction.Reset)
@@ -121,26 +109,21 @@ internal sealed class EndpointRuntimeRegistry : IDisposable
             }
 
             for (var i = 0; i < _endpoints.Count; i++)
-            {
                 RegisterEndpoint(_endpoints[i]);
-            }
         }
     }
 
     private void OnConnectivityChanged(object? sender, ConnectivityChangedEventArgs e)
     {
         if (e.NetworkAccess == NetworkAccess.None)
-        {
             return;
-        }
 
         for (var i = 0; i < _endpoints.Count; i++)
         {
             var endpoint = _endpoints[i];
+
             if (_runtimes.TryGetValue(endpoint.Id, out var runtime))
-            {
                 runtime.Reconnect(endpoint.Hostname, endpoint.Port);
-            }
         }
     }
 }
@@ -161,9 +144,7 @@ internal sealed class EndpointRuntime : IDisposable
     public void Reconnect(string? hostname, int port)
     {
         if (string.Equals(_hostname, hostname, StringComparison.OrdinalIgnoreCase) && _port == port && Client != null)
-        {
             return;
-        }
 
         Client?.Dispose();
         Client = null;
@@ -171,9 +152,7 @@ internal sealed class EndpointRuntime : IDisposable
         _port = port;
 
         if (string.IsNullOrWhiteSpace(hostname) || port <= 0 || port > 65535)
-        {
             return;
-        }
 
         try
         {

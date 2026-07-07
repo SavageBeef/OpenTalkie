@@ -1,7 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using OpenTalkie.Abstractions.Services;
 using OpenTalkie.Application.Abstractions.Services;
-using OpenTalkie.Presentation.Abstractions.Services;
 using System.Collections.ObjectModel;
 
 namespace OpenTalkie.Presentation.ViewModels;

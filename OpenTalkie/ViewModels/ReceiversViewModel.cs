@@ -1,9 +1,10 @@
 using Mediator;
+using OpenTalkie.Abstractions.Services;
 using OpenTalkie.Application.Abstractions.Services;
 using OpenTalkie.Domain.Enums;
-using OpenTalkie.Presentation.Abstractions.Services;
+using OpenTalkie.Presentation.ViewModels;
 
-namespace OpenTalkie.Presentation.ViewModels;
+namespace OpenTalkie.ViewModels;
 
 public partial class ReceiversViewModel(
     IMediator mediator,

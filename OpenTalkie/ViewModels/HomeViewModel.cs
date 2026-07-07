@@ -1,12 +1,10 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Mediator;
-using Microsoft.Maui.ApplicationModel;
+using OpenTalkie.Abstractions.Services;
 using OpenTalkie.Application.Abstractions.Services;
 using OpenTalkie.Application.Home.Commands;
 using OpenTalkie.Application.Streams;
-using OpenTalkie.Domain.Models;
-using OpenTalkie.Presentation.Abstractions.Services;
 using System.Collections.ObjectModel;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
@@ -147,9 +145,7 @@ public partial class HomeViewModel : ObservableObject
     private static async Task ShowErrorIfFailedAsync(OperationResult result, IUserDialogService dialogService)
     {
         if (result.IsSuccess || string.IsNullOrWhiteSpace(result.ErrorMessage))
-        {
             return;
-        }
 
         await dialogService.ShowErrorAsync(result.ErrorMessage);
     }
@@ -172,18 +168,15 @@ public partial class HomeViewModel : ObservableObject
                     for (int j = 0; j < unicastAddresses.Count; j++)
                     {
                         var unicastAddress = unicastAddresses[j];
+
                         if (unicastAddress.Address.AddressFamily == AddressFamily.InterNetwork)
-                        {
                             NetworkAddresses.Add($"{networkInterface.Name}: {unicastAddress.Address}");
-                        }
                     }
                 }
             }
 
             if (NetworkAddresses.Count == 0)
-            {
                 NetworkAddresses.Add("No networks available");
-            }
         }
         catch (Exception ex)
         {

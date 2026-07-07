@@ -9,9 +9,7 @@ public readonly record struct GetAudioManagerSettingOptionsQuery(AudioManagerSet
 public sealed class GetAudioManagerSettingOptionsQueryHandler(IAudioManagerSettingsRepository repository)
     : IQueryHandler<GetAudioManagerSettingOptionsQuery, IReadOnlyList<SettingOptionItem>>
 {
-    public ValueTask<IReadOnlyList<SettingOptionItem>> Handle(
-        GetAudioManagerSettingOptionsQuery query,
-        CancellationToken cancellationToken)
+    public ValueTask<IReadOnlyList<SettingOptionItem>> Handle(GetAudioManagerSettingOptionsQuery query, CancellationToken cancellationToken)
     {
         return ValueTask.FromResult(repository.GetOptions(query.Option));
     }

@@ -9,9 +9,7 @@ public readonly record struct GetMicrophoneSettingOptionsQuery(MicrophoneSetting
 public sealed class GetMicrophoneSettingOptionsQueryHandler(IMicrophoneRepository repository)
     : IQueryHandler<GetMicrophoneSettingOptionsQuery, IReadOnlyList<SettingOptionItem>>
 {
-    public ValueTask<IReadOnlyList<SettingOptionItem>> Handle(
-        GetMicrophoneSettingOptionsQuery query,
-        CancellationToken cancellationToken)
+    public ValueTask<IReadOnlyList<SettingOptionItem>> Handle(GetMicrophoneSettingOptionsQuery query, CancellationToken cancellationToken)
     {
         return ValueTask.FromResult(repository.GetOptions(query.Option));
     }

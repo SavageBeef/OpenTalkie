@@ -17,14 +17,10 @@ public sealed class SwitchPlaybackBroadcastCommandHandler(
         if (playbackBroadcastService.Status.Phase is StreamSessionPhase.Stopped or StreamSessionPhase.Faulted)
         {
             if (!await microphonePermissionService.RequestMicrophonePermissionAsync())
-            {
                 return OperationResult.Fail("Microphone permission denied");
-            }
 
             if (!await playbackBroadcastService.RequestPermissionAsync())
-            {
                 return OperationResult.Fail("Screen capture permission denied");
-            }
         }
 
         return playbackBroadcastService.Switch();

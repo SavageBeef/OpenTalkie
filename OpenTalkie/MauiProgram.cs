@@ -1,8 +1,5 @@
 using CommunityToolkit.Maui;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Maui.Controls.Hosting;
-using Microsoft.Maui.Hosting;
 using OpenTalkie.Application.DependencyInjection;
 using OpenTalkie.DependencyInjection;
 using OpenTalkie.Infrastructure.Android.DependencyInjection;

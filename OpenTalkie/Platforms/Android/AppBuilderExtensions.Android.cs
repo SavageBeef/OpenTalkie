@@ -1,6 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Maui;
-using Microsoft.Maui.Hosting;
 using Microsoft.Maui.LifecycleEvents;
 using OpenTalkie.Application.Abstractions.Services;
 using OpenTalkie.Infrastructure.Android.Platforms.Android.Infrastructure.Services.Playback;
@@ -21,15 +18,12 @@ public static partial class AppBuilderExtensions
                 android.OnActivityResult((activity, requestCode, resultCode, data) =>
                 {
                     if (requestCode != MediaProjectionProvider.RequestMediaProjectionCode)
-                    {
                         return;
-                    }
 
                     var provider = IPlatformApplication.Current?.Services.GetService<MediaProjectionProvider>();
+
                     if (provider == null)
-                    {
                         return;
-                    }
 
                     switch (resultCode)
                     {

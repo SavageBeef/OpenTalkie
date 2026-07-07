@@ -8,14 +8,10 @@ internal static class StreamEndpointValidation
     public static string? ValidateName(string name)
     {
         if (string.IsNullOrWhiteSpace(name))
-        {
             return "Name cannot be empty.";
-        }
 
         if (name.Length > 16)
-        {
             return "Name cannot be longer than 16 characters.";
-        }
 
         return null;
     }
@@ -23,15 +19,12 @@ internal static class StreamEndpointValidation
     public static string? ValidateHostname(string hostname)
     {
         if (string.IsNullOrWhiteSpace(hostname))
-        {
             return "Hostname cannot be empty.";
-        }
 
         var hostType = Uri.CheckHostName(hostname);
+
         if (hostType is not UriHostNameType.IPv4 and not UriHostNameType.IPv6 and not UriHostNameType.Dns)
-        {
             return "Invalid hostname format.";
-        }
 
         return null;
     }

@@ -13,10 +13,9 @@ public sealed class SetReceiverPreferredAudioOutputDeviceCommandHandler(IReceive
         CancellationToken cancellationToken)
     {
         OperationResult validation = SettingsValidation.ValidateNotEmpty(command.Value, "Output device");
+
         if (!validation.IsSuccess)
-        {
             return ValueTask.FromResult(validation);
-        }
 
         repository.SetPreferredDevice(command.Value);
         return ValueTask.FromResult(OperationResult.Success());

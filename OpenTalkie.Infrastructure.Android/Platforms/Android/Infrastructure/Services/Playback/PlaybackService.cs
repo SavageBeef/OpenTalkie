@@ -2,7 +2,6 @@ using Android.Media;
 using Android.Media.Projection;
 using OpenTalkie.Application.Abstractions.Repositories;
 using OpenTalkie.Application.Abstractions.Services;
-using OpenTalkie.Domain.Models;
 using Encoding = Android.Media.Encoding;
 
 namespace OpenTalkie.Infrastructure.Android.Platforms.Android.Infrastructure.Services.Playback;
@@ -77,10 +76,8 @@ public class PlaybackService : IPlaybackService
 
         try
         {
-            var mediaProjection = mediaProjectionProvider.GetActiveProjection();
-
-            if (mediaProjection == null)
-                throw new NullReferenceException("Media projection not provided");
+            var mediaProjection = mediaProjectionProvider.GetActiveProjection()
+                ?? throw new NullReferenceException("Media projection not provided");
 
             LoadPreferences();
             CreateAudioRecord(mediaProjection);

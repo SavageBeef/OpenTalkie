@@ -1,8 +1,6 @@
 using Android.App;
 using Android.Runtime;
 using Java.Lang;
-using Microsoft.Maui;
-using Microsoft.Maui.Hosting;
 using System.Diagnostics;
 
 namespace OpenTalkie.Platforms.Android;

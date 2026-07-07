@@ -32,9 +32,7 @@ public static class MicrophoneAudioRecord
             }
 
             if (_microphoneRepository != null && _volumeSubscriptionAttached)
-            {
                 _microphoneRepository.VolumeChanged -= OnVolumeChange;
-            }
 
             _microphoneRepository = microphoneRepository;
             _audioManagerSettingsRepository = audioManagerSettingsRepository;
@@ -166,7 +164,8 @@ public static class MicrophoneAudioRecord
 
     private static IMicrophoneRepository GetMicrophoneRepository()
     {
-        return _microphoneRepository ?? throw new InvalidOperationException("Microphone repository service is unavailable.");
+        return _microphoneRepository 
+            ?? throw new InvalidOperationException("Microphone repository service is unavailable.");
     }
 
     public static void SetPreferredAudioDevice(string preferredDevice)

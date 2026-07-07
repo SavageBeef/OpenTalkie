@@ -47,15 +47,12 @@ public sealed class EndpointCatalogService : IEndpointCatalogService
     public bool UpdateEndpoint(Endpoint endpoint)
     {
         if (!_endpointsByType.TryGetValue(endpoint.Type, out var endpoints))
-        {
             return false;
-        }
 
         var index = endpoints.FindIndex(existing => existing.Id == endpoint.Id);
+
         if (index < 0)
-        {
             return false;
-        }
 
         endpoints[index] = endpoint;
         EndpointsChanged?.Invoke(endpoint.Type);
@@ -65,15 +62,12 @@ public sealed class EndpointCatalogService : IEndpointCatalogService
     public bool RemoveEndpoint(EndpointType streamType, Guid endpointId)
     {
         if (!_endpointsByType.TryGetValue(streamType, out var endpoints))
-        {
             return false;
-        }
 
         var removed = endpoints.RemoveAll(endpoint => endpoint.Id == endpointId) > 0;
+
         if (removed)
-        {
             EndpointsChanged?.Invoke(streamType);
-        }
 
         return removed;
     }

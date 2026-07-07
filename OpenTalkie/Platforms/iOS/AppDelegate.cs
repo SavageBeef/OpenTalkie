@@ -1,11 +1,10 @@
 ﻿using Foundation;
 using Microsoft.Maui;
 
-namespace OpenTalkie
+namespace OpenTalkie.Platforms.iOS;
+
+[Register("AppDelegate")]
+public class AppDelegate : MauiUIApplicationDelegate
 {
-    [Register("AppDelegate")]
-    public class AppDelegate : MauiUIApplicationDelegate
-    {
-        protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
-    }
+    protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
 }

@@ -1,11 +1,11 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Mediator;
+using OpenTalkie.Abstractions.Services;
 using OpenTalkie.Application.Abstractions.Services;
 using OpenTalkie.Application.Settings.Commands;
 using OpenTalkie.Application.Settings.Queries;
 using OpenTalkie.Application.Streams;
-using OpenTalkie.Presentation.Abstractions.Services;
 
 namespace OpenTalkie.Presentation.ViewModels;
 

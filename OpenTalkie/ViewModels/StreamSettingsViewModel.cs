@@ -1,12 +1,11 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Mediator;
+using OpenTalkie.Abstractions.Services;
 using OpenTalkie.Application.Abstractions.Services;
 using OpenTalkie.Application.Streams.Commands;
 using OpenTalkie.Domain.Enums;
-using OpenTalkie.Domain.Models;
 using OpenTalkie.Domain.VBAN;
-using OpenTalkie.Presentation.Abstractions.Services;
 
 namespace OpenTalkie.Presentation.ViewModels;
 
@@ -87,9 +86,7 @@ public partial class StreamSettingsViewModel : ObservableObject
     private async Task EditName()
     {
         if (_currentEndpoint == null)
-        {
             return;
-        }
 
         await _dialogService.ShowEditFieldAsync(
             "Edit Name",
@@ -110,9 +107,7 @@ public partial class StreamSettingsViewModel : ObservableObject
     private async Task EditHostname()
     {
         if (_currentEndpoint == null)
-        {
             return;
-        }
 
         await _dialogService.ShowEditFieldAsync(
             "Edit Hostname",
@@ -133,9 +128,7 @@ public partial class StreamSettingsViewModel : ObservableObject
     private async Task EditPort()
     {
         if (_currentEndpoint == null)
-        {
             return;
-        }
 
         await _dialogService.ShowEditFieldAsync(
             "Edit Port",
@@ -158,9 +151,7 @@ public partial class StreamSettingsViewModel : ObservableObject
     private async Task EditQuality()
     {
         if (_currentEndpoint == null)
-        {
             return;
-        }
 
         var options = new[] { "Optimal", "Fast", "Medium", "Slow", "Very Slow" };
         await _dialogService.ShowOptionsAsync(
@@ -186,9 +177,7 @@ public partial class StreamSettingsViewModel : ObservableObject
     private async Task DenoiseToggled()
     {
         if (_isApplyingEndpointState || _currentEndpoint == null)
-        {
             return;
-        }
 
         if (IsDenoiseEnabled)
         {
@@ -202,37 +191,27 @@ public partial class StreamSettingsViewModel : ObservableObject
         }
 
         if (!await TryUpdateEndpointAsync(new UpdateStreamEndpointCommand(StreamType, EndpointId, IsDenoiseEnabled: IsDenoiseEnabled)))
-        {
             ApplyEndpoint(_currentEndpoint);
-        }
     }
 
     [RelayCommand]
     private async Task MobileDataToggled()
     {
         if (_isApplyingEndpointState || _currentEndpoint == null)
-        {
             return;
-        }
 
         if (!await TryUpdateEndpointAsync(new UpdateStreamEndpointCommand(StreamType, EndpointId, AllowMobileData: AllowMobileData)))
-        {
             ApplyEndpoint(_currentEndpoint);
-        }
     }
 
     private void ReloadEndpoint()
     {
         if (EndpointId == Guid.Empty)
-        {
             return;
-        }
 
         _currentEndpoint = _endpointCatalogService.GetEndpoint(StreamType, EndpointId);
         if (_currentEndpoint != null)
-        {
             ApplyEndpoint(_currentEndpoint);
-        }
     }
 
     private void ApplyEndpoint(Endpoint endpoint)
@@ -250,9 +229,7 @@ public partial class StreamSettingsViewModel : ObservableObject
     private void OnEndpointsChanged(EndpointType endpointType)
     {
         if (endpointType == StreamType)
-        {
             ReloadEndpoint();
-        }
     }
 
     private async Task<bool> TryUpdateEndpointAsync(UpdateStreamEndpointCommand command)

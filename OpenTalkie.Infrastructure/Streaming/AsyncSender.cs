@@ -541,7 +541,7 @@ public class AsyncSender : IDisposable
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private void InitializePacketHeader(Span<byte> header, int srIndex, int channels, VBanBitResolution bitRes)
+    private static void InitializePacketHeader(Span<byte> header, int srIndex, int channels, VBanBitResolution bitRes)
     {
         header[0] = (byte)'V';
         header[1] = (byte)'B';
@@ -551,7 +551,7 @@ public class AsyncSender : IDisposable
         header[6] = (byte)(Math.Max(1, channels) - 1);
         header[7] = (byte)(((int)VBanCodec.VBAN_CODEC_PCM & 0xE0) | ((int)bitRes & 0x1F));
     }
-    private void InitializePacketHeader(byte[] packetBuffer, int sampleRate, int channels, VBanBitResolution bitRes)
+    private static void InitializePacketHeader(byte[] packetBuffer, int sampleRate, int channels, VBanBitResolution bitRes)
         => InitializePacketHeader(packetBuffer.AsSpan(0, 28), Array.IndexOf(VBANConsts.SAMPLERATES, sampleRate), channels, bitRes);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -8,9 +8,7 @@ public readonly record struct GetPlaybackSettingsQuery : IQuery<PlaybackSettings
 public sealed class GetPlaybackSettingsQueryHandler(IPlaybackRepository repository)
     : IQueryHandler<GetPlaybackSettingsQuery, PlaybackSettingsState>
 {
-    public ValueTask<PlaybackSettingsState> Handle(
-        GetPlaybackSettingsQuery query,
-        CancellationToken cancellationToken)
+    public ValueTask<PlaybackSettingsState> Handle(GetPlaybackSettingsQuery query, CancellationToken cancellationToken)
     {
         return ValueTask.FromResult(repository.GetSettings());
     }

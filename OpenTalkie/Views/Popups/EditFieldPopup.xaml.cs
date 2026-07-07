@@ -1,5 +1,4 @@
 using CommunityToolkit.Maui.Views;
-using Microsoft.Maui;
 using OpenTalkie.Presentation.ViewModels.Popups;
 
 namespace OpenTalkie.Presentation.Views.Popups;

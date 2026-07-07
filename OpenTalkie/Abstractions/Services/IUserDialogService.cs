@@ -1,4 +1,4 @@
-namespace OpenTalkie.Presentation.Abstractions.Services;
+namespace OpenTalkie.Abstractions.Services;
 
 public interface IUserDialogService
 {

@@ -1,5 +1,4 @@
-using Microsoft.Extensions.DependencyInjection;
-using OpenTalkie.Presentation.Abstractions.Services;
+using OpenTalkie.Abstractions.Services;
 
 namespace OpenTalkie;
 

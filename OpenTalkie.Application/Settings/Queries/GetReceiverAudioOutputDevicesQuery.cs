@@ -8,9 +8,7 @@ public readonly record struct GetReceiverAudioOutputDevicesQuery : IQuery<IReadO
 public sealed class GetReceiverAudioOutputDevicesQueryHandler(IReceiverRepository repository)
     : IQueryHandler<GetReceiverAudioOutputDevicesQuery, IReadOnlyList<SettingOptionItem>>
 {
-    public ValueTask<IReadOnlyList<SettingOptionItem>> Handle(
-        GetReceiverAudioOutputDevicesQuery query,
-        CancellationToken cancellationToken)
+    public ValueTask<IReadOnlyList<SettingOptionItem>> Handle(GetReceiverAudioOutputDevicesQuery query, CancellationToken cancellationToken)
     {
         return ValueTask.FromResult(repository.GetAudioOutputOptions());
     }

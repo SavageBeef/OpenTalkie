@@ -1,4 +1,3 @@
-using Microsoft.Maui.Controls;
 using OpenTalkie.Domain.Enums;
 using OpenTalkie.Presentation.ViewModels;
 

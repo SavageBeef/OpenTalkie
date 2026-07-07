@@ -5,9 +5,9 @@ namespace OpenTalkie.Views;
 
 public static class PopupHost
 {
-    public static async Task ShowAsync(Microsoft.Maui.Controls.View popup)
+    public static async Task ShowAsync(View popup)
     {
-        if (Microsoft.Maui.Controls.Application.Current?.Windows.FirstOrDefault()?.Page is Page page)
+        if (Microsoft.Maui.Controls.Application.Current?.Windows[0]?.Page is Page page)
         {
             var popupOptions = new PopupOptions
             {

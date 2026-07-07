@@ -1,5 +1,5 @@
-using Microsoft.Maui.Controls;
 using OpenTalkie.Presentation.ViewModels;
+using OpenTalkie.ViewModels;
 using System.Windows.Input;
 
 namespace OpenTalkie.Presentation.Views;

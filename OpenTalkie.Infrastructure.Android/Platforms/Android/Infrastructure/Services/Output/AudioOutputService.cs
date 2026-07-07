@@ -36,10 +36,10 @@ public class AudioOutputService(IReceiverRepository receiverRepository, IAudioMa
 
         var attrsBuilder = new AudioAttributes.Builder();
 
-        attrsBuilder = attrsBuilder.SetUsage(isInCommunication ? AudioUsageKind.VoiceCommunication : AudioUsageKind.Media) 
+        attrsBuilder = attrsBuilder.SetUsage(isInCommunication ? AudioUsageKind.VoiceCommunication : AudioUsageKind.Media)
             ?? throw new InvalidOperationException("Could not configure audio usage.");
 
-        attrsBuilder = attrsBuilder.SetContentType(isInCommunication ? AudioContentType.Speech : AudioContentType.Music) 
+        attrsBuilder = attrsBuilder.SetContentType(isInCommunication ? AudioContentType.Speech : AudioContentType.Music)
             ?? throw new InvalidOperationException("Could not configure audio content type.");
 
         var attrs = attrsBuilder.Build() ?? throw new InvalidOperationException("Could not build audio attributes.");

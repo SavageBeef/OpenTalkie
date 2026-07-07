@@ -1,4 +1,3 @@
-using Microsoft.Maui.Controls;
 using OpenTalkie.Presentation.ViewModels;
 
 namespace OpenTalkie.Presentation.Views;

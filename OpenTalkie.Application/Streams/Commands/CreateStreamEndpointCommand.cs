@@ -28,22 +28,19 @@ public sealed class CreateStreamEndpointCommandHandler(
         CancellationToken cancellationToken)
     {
         string? error = StreamEndpointValidation.ValidateName(command.Name);
+
         if (error != null)
-        {
             return OperationResult<Endpoint>.Fail(error);
-        }
 
         error = StreamEndpointValidation.ValidateHostname(command.Hostname);
+
         if (error != null)
-        {
             return OperationResult<Endpoint>.Fail(error);
-        }
 
         error = StreamEndpointValidation.ValidatePort(command.Port);
+
         if (error != null)
-        {
             return OperationResult<Endpoint>.Fail(error);
-        }
 
         var endpoints = endpointCatalogService.GetEndpoints(command.StreamType);
 

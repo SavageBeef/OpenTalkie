@@ -5,4 +5,3 @@ public interface IReceiverForegroundServiceController
     void Start();
     void Stop();
 }
-

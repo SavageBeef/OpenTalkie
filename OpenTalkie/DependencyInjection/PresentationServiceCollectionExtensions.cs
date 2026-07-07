@@ -1,6 +1,4 @@
-using Microsoft.Extensions.DependencyInjection;
-using OpenTalkie.Presentation.Abstractions.Services;
-using OpenTalkie.Presentation.DependencyInjection;
+using OpenTalkie.Abstractions.Services;
 using OpenTalkie.Presentation.Views;
 using OpenTalkie.Services;
 

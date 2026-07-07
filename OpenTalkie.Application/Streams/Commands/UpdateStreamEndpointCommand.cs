@@ -32,10 +32,9 @@ public sealed class UpdateStreamEndpointCommandHandler(
         var endpoints = endpointCatalogService.GetEndpoints(command.StreamType);
 
         var endpoint = endpoints.FirstOrDefault(e => e.Id == command.EndpointId);
+
         if (endpoint == null)
-        {
             return OperationResult.Fail("Stream endpoint was not found.");
-        }
 
         bool destinationChanged = command.Hostname != null || command.Port.HasValue;
         bool identityChanged = command.Name != null || destinationChanged;
@@ -46,39 +45,33 @@ public sealed class UpdateStreamEndpointCommandHandler(
         if (command.Name != null)
         {
             string? nameError = StreamEndpointValidation.ValidateName(command.Name);
+
             if (nameError != null)
-            {
                 return OperationResult.Fail(nameError);
-            }
         }
 
         if (command.Volume is float volumeToValidate)
         {
             string? volumeError = StreamEndpointValidation.ValidateVolume(volumeToValidate);
+
             if (volumeError != null)
-            {
                 return OperationResult.Fail(volumeError);
-            }
         }
 
         if (destinationChanged)
         {
             string? hostError = StreamEndpointValidation.ValidateHostname(proposedHostname);
+
             if (hostError != null)
-            {
                 return OperationResult.Fail(hostError);
-            }
 
             string? portError = StreamEndpointValidation.ValidatePort(proposedPort);
+
             if (portError != null)
-            {
                 return OperationResult.Fail(portError);
-            }
 
             if (!endpointAddressValidator.CanResolveHost(proposedHostname))
-            {
                 return OperationResult.Fail("Could not resolve hostname or create UDP endpoint.");
-            }
         }
 
         if (identityChanged && StreamEndpointValidation.HasIdentityCollision(

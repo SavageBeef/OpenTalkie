@@ -9,5 +9,3 @@ public interface IAudioOutputService
     void Stop();
     void Write(byte[] buffer, int offset, int count);
 }
-
-

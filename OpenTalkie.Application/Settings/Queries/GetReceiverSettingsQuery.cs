@@ -8,9 +8,7 @@ public readonly record struct GetReceiverSettingsQuery : IQuery<ReceiverSettings
 public sealed class GetReceiverSettingsQueryHandler(IReceiverRepository repository)
     : IQueryHandler<GetReceiverSettingsQuery, ReceiverSettingsState>
 {
-    public ValueTask<ReceiverSettingsState> Handle(
-        GetReceiverSettingsQuery query,
-        CancellationToken cancellationToken)
+    public ValueTask<ReceiverSettingsState> Handle(GetReceiverSettingsQuery query, CancellationToken cancellationToken)
     {
         return ValueTask.FromResult(repository.GetSettings());
     }

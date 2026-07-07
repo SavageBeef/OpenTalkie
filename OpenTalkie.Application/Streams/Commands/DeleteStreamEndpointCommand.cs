@@ -18,10 +18,9 @@ public sealed class DeleteStreamEndpointCommandHandler(
         CancellationToken cancellationToken)
     {
         var endpoint = endpointCatalogService.GetEndpoint(command.StreamType, command.EndpointId);
+
         if (endpoint == null)
-        {
             return OperationResult.Fail("Stream endpoint was not found.");
-        }
 
         try
         {

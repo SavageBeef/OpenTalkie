@@ -10,9 +10,7 @@ public sealed class EndpointAddressValidator : IEndpointAddressValidator
         try
         {
             if (IPAddress.TryParse(hostname, out _))
-            {
                 return true;
-            }
 
             var addresses = Dns.GetHostAddresses(hostname);
             return addresses.Length > 0;

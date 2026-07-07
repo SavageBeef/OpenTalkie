@@ -5,7 +5,6 @@ using OpenTalkie.Domain.VBAN;
 using OpenTalkie.Infrastructure.RNNoise;
 using OpenTalkie.Infrastructure.Streaming;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -28,10 +27,10 @@ public sealed class ReceiverService : IReceiverService
     private readonly SemaphoreSlim _incomingSignal = new(0);
     private CancellationTokenSource? _procCts;
     private Task? _procTask;
-    private readonly Dictionary<Guid, StreamBuffer> _buffers = new();
+    private readonly Dictionary<Guid, StreamBuffer> _buffers = [];
     private StreamBuffer[] _activeBuffers = Array.Empty<StreamBuffer>();
-    private readonly Dictionary<Guid, DenoiseCtx> _denoisers = new();
-    private readonly object _outputLock = new();
+    private readonly Dictionary<Guid, DenoiseCtx> _denoisers = [];
+    private readonly Lock _outputLock = new();
     private int _currentSampleRate;
     private int _currentChannels;
     private const int TargetSampleRate = 48000;
@@ -71,9 +70,7 @@ public sealed class ReceiverService : IReceiverService
     public void Start()
     {
         if (_status.Phase is StreamSessionPhase.Starting or StreamSessionPhase.Running)
-        {
             return;
-        }
 
         SetStatus(StreamSessionStatus.Starting());
 
@@ -104,9 +101,7 @@ public sealed class ReceiverService : IReceiverService
     public void Stop()
     {
         if (_status.Phase is StreamSessionPhase.Stopped or StreamSessionPhase.Stopping)
-        {
             return;
-        }
 
         SetStatus(StreamSessionStatus.Stopping());
 
@@ -127,7 +122,16 @@ public sealed class ReceiverService : IReceiverService
             _buffers.Clear();
         }
         var dvals = _denoisers.Values.ToList();
-        for (int i = 0; i < dvals.Count; i++) try { dvals[i].Dn?.Dispose(); } catch { }
+
+        for (int i = 0; i < dvals.Count; i++)
+        {
+            try
+            {
+                dvals[i].Dn?.Dispose();
+            }
+            catch { }
+        }
+
         _denoisers.Clear();
         Volatile.Write(ref _activeBuffers, Array.Empty<StreamBuffer>());
         try
@@ -140,7 +144,10 @@ public sealed class ReceiverService : IReceiverService
 
     public void Switch()
     {
-        if (_status.Phase == StreamSessionPhase.Running) Stop(); else Start();
+        if (_status.Phase == StreamSessionPhase.Running) 
+            Stop(); 
+        else 
+            Start();
     }
     private void OnFrameReceived(Endpoint ep, byte[] payload, WaveFormat wf)
     {
@@ -324,8 +331,10 @@ public sealed class ReceiverService : IReceiverService
                 {
                     if (!_buffers.TryGetValue(ep.Id, out var buf))
                     {
-                        buf = new StreamBuffer(BytesPerChunk, ComputeMaxQueuedChunks(ep.Quality), ComputeMinReadyChunks(ep.Quality));
-                        buf.Volume = ep.Volume;
+                        buf = new StreamBuffer(BytesPerChunk, ComputeMaxQueuedChunks(ep.Quality), ComputeMinReadyChunks(ep.Quality))
+                        {
+                            Volume = ep.Volume
+                        };
                         _buffers[ep.Id] = buf;
                         added = true;
                     }
@@ -659,7 +668,7 @@ public sealed class ReceiverService : IReceiverService
     {
         private readonly Queue<byte[]> _queue = new();
         private int _offset = 0;
-        private readonly object _lock = new();
+        private readonly Lock _lock = new();
         private int _queuedBytes = 0;
         private readonly int _bytesPerChunk;
         private int _maxQueuedChunks;

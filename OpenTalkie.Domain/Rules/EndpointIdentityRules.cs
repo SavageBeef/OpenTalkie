@@ -16,9 +16,7 @@ public static class EndpointIdentityRules
         foreach (var endpoint in endpoints)
         {
             if (excludingEndpointId.HasValue && endpoint.Id == excludingEndpointId.Value)
-            {
                 continue;
-            }
 
             if (Collides(
                 streamType,
@@ -48,24 +46,16 @@ public static class EndpointIdentityRules
         int existingPort)
     {
         if (candidateType != existingType)
-        {
             return false;
-        }
 
         if (candidatePort != existingPort)
-        {
             return false;
-        }
 
         if (!VbanStreamName16.EqualsName(candidateName, existingName))
-        {
             return false;
-        }
 
         if (candidateType == EndpointType.Receiver)
-        {
             return true;
-        }
 
         return string.Equals(candidateHostname, existingHostname, StringComparison.OrdinalIgnoreCase);
     }

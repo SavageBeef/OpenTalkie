@@ -1,5 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Maui.Hosting;
 using OpenTalkie.Application.Abstractions.Services;
 using OpenTalkie.Application.Models;
 

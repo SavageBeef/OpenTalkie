@@ -1,9 +1,9 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Mediator;
+using OpenTalkie.Abstractions.Services;
 using OpenTalkie.Application.Settings.Commands;
 using OpenTalkie.Application.Settings.Queries;
-using OpenTalkie.Presentation.Abstractions.Services;
 
 namespace OpenTalkie.Presentation.ViewModels;
 
@@ -52,9 +52,7 @@ public partial class ReceiverSettingsViewModel : ObservableObject
     private async Task EditField(string fieldName)
     {
         if (fieldName != "PrefferedAudioOutputDevice")
-        {
             return;
-        }
 
         var options = await _mediator.Send(new GetReceiverAudioOutputDevicesQuery());
         var labels = options.Select(item => item.DisplayName).ToArray();
@@ -66,10 +64,9 @@ public partial class ReceiverSettingsViewModel : ObservableObject
             async result =>
             {
                 var selectedOption = options.FirstOrDefault(item => item.DisplayName == result);
+
                 if (string.IsNullOrWhiteSpace(selectedOption.Value) || selectedOption.DisplayName == currentValue)
-                {
                     return;
-                }
 
                 var updateResult = await _mediator.Send(new SetReceiverPreferredAudioOutputDeviceCommand(selectedOption.Value));
                 if (!updateResult.IsSuccess)
