@@ -12,6 +12,7 @@
         Style="{StaticResource M3CardBorder}"
         HorizontalOptions="Center"
         VerticalOptions="Center"
+        MinimumWidthRequest="320"
         MaximumWidthRequest="420"
         Padding="16"
         StrokeThickness="0"

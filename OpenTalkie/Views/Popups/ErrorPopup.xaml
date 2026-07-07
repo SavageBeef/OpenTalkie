@@ -14,6 +14,7 @@
             Style="{StaticResource M3CardBorder}"
             HorizontalOptions="Center"
             VerticalOptions="Center"
+            MinimumWidthRequest="320"
             Padding="20"
             StrokeShape="RoundRectangle 12"
             StrokeThickness="0"
