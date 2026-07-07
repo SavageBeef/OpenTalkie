@@ -5,7 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
         xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:views="clr-namespace:OpenTalkie.Presentation.Views"
-    xmlns:vm="clr-namespace:OpenTalkie.Presentation.ViewModels;assembly=OpenTalkie.Presentation"
+    xmlns:vm="clr-namespace:OpenTalkie.Presentation.ViewModels"
     x:Name="MicrophoneStreamsRoot"
     x:DataType="vm:MicrophoneStreamsViewModel"
     Padding="16,16,16,0">

@@ -5,7 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:views="clr-namespace:OpenTalkie.Presentation.Views.Popups"
-    xmlns:viewmodel="clr-namespace:OpenTalkie.Presentation.ViewModels.Popups;assembly=OpenTalkie.Presentation"
+    xmlns:viewmodel="clr-namespace:OpenTalkie.Presentation.ViewModels.Popups"
     x:Name="OptionsPopupRoot"
     x:DataType="viewmodel:OptionsViewModel"
     BackgroundColor="Transparent"
