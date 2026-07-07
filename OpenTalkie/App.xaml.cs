@@ -1,20 +1,29 @@
-﻿using CommunityToolkit.Maui.Views;
-using OpenTalkie.View.Popups;
+using OpenTalkie.Abstractions.Services;
 
 namespace OpenTalkie;
 
-public partial class App : Application
+public partial class App : Microsoft.Maui.Controls.Application
 {
+    private readonly IServiceProvider _serviceProvider;
+
     public App(IServiceProvider serviceProvider)
     {
+        _serviceProvider = serviceProvider;
         InitializeComponent();
-
-        MainPage = serviceProvider.GetService<AppShell>();
 
         AppDomain.CurrentDomain.UnhandledException += async (send, error) =>
         {
-            var errorPopup = new ErrorPopup(error.ExceptionObject.ToString());
-            await MainPage.ShowPopupAsync(errorPopup);
+            var errorMessage = error.ExceptionObject?.ToString() ?? "Unhandled exception occurred.";
+            IUserDialogService? dialogService = _serviceProvider.GetService<IUserDialogService>();
+            if (dialogService != null)
+            {
+                await dialogService.ShowErrorAsync(errorMessage);
+            }
         };
+    }
+
+    protected override Window CreateWindow(IActivationState? activationState)
+    {
+        return new Window(_serviceProvider.GetRequiredService<AppShell>());
     }
 }

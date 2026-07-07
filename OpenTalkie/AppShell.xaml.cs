@@ -1,17 +1,22 @@
-﻿using OpenTalkie.View;
+using OpenTalkie.Application.Abstractions.Services;
+using OpenTalkie.Presentation.Views;
 
 namespace OpenTalkie;
 
 public partial class AppShell : Shell
 {
-    public AppShell()
+    public AppShell(IPlatformCapabilitiesService platformCapabilitiesService)
     {
         InitializeComponent();
 
-        if (!OperatingSystem.IsAndroidVersionAtLeast(29))
+        if (!platformCapabilitiesService.GetCapabilities().IsPlaybackCaptureSupported)
             PlaybackStreams.IsVisible = false;
 
         Routing.RegisterRoute("StreamSettingsPage", typeof(StreamSettingsPage));
         Routing.RegisterRoute("AddStreamPage", typeof(AddStreamPage));
+        Routing.RegisterRoute("MicSettingsPage", typeof(MicSettingsPage));
+        Routing.RegisterRoute("PlaybackSettingsPage", typeof(PlaybackSettingsPage));
+        Routing.RegisterRoute("ReceiverSettingsPage", typeof(ReceiverSettingsPage));
+        Routing.RegisterRoute("AudioManagerSettingsPage", typeof(AudioManagerSettingsPage));
     }
 }

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="OpenTalkie.Presentation.Views.AudioManagerSettingsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodel="clr-namespace:OpenTalkie.Presentation.ViewModels"
+    Title="Audio manager settings"
+    x:DataType="viewmodel:AudioManagerSettingsViewModel"
+    Padding="16">
+    <ScrollView VerticalScrollBarVisibility="Never" HorizontalScrollBarVisibility="Never">
+        <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="16">
+
+            <Border
+                Grid.Row="0"
+                Padding="16"
+                BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceContainerLowLight}, Dark={StaticResource SurfaceContainerLowDark}}"
+                Stroke="{AppThemeBinding Light={StaticResource OutlineLight}, Dark={StaticResource OutlineDark}}"
+                StrokeShape="RoundRectangle 8"
+                Shadow="{StaticResource MaterialShadowLevel1}">
+                <VerticalStackLayout Spacing="8">
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="18"
+                        Text="System audio routing"
+                        TextColor="{AppThemeBinding Light={StaticResource OnSurfaceLight}, Dark={StaticResource OnSurfaceDark}}" />
+                    <Label
+                        FontSize="14"
+                        Text="Normal mode is best for standard media. InCommunication mode uses Android communication routing for low-latency voice-style streams."
+                        TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariantLight}, Dark={StaticResource OnSurfaceVariantDark}}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Border
+                Grid.Row="1"
+                Padding="16"
+                BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceContainerLowLight}, Dark={StaticResource SurfaceContainerLowDark}}"
+                Stroke="{AppThemeBinding Light={StaticResource OutlineLight}, Dark={StaticResource OutlineDark}}"
+                StrokeShape="RoundRectangle 8"
+                Shadow="{StaticResource MaterialShadowLevel1}">
+                <Grid Padding="5">
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding EditFieldCommand}" CommandParameter="AudioManagerMode" />
+                    </Grid.GestureRecognizers>
+                    <Grid
+                        ColumnDefinitions="*"
+                        RowDefinitions="Auto,Auto"
+                        RowSpacing="4"
+                        VerticalOptions="Center">
+                        <Label Grid.Row="0">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="System audio mode " TextColor="{AppThemeBinding Light={StaticResource OnSurfaceLight}, Dark={StaticResource OnSurfaceDark}}" FontAttributes="Bold" FontSize="16" />
+                                    <Span Text="(requires restart)" TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariantLight}, Dark={StaticResource OnSurfaceVariantDark}}" FontSize="14" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                        <Label
+                            Grid.Row="1"
+                            FontSize="14"
+                            Text="{Binding SelectedAudioManagerMode}"
+                            TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariantLight}, Dark={StaticResource OnSurfaceVariantDark}}" />
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <Border
+                Grid.Row="2"
+                Padding="16"
+                BackgroundColor="{AppThemeBinding Light={StaticResource SurfaceContainerLowLight}, Dark={StaticResource SurfaceContainerLowDark}}"
+                Stroke="{AppThemeBinding Light={StaticResource OutlineLight}, Dark={StaticResource OutlineDark}}"
+                StrokeShape="RoundRectangle 8"
+                Shadow="{StaticResource MaterialShadowLevel1}">
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="16">
+                    <VerticalStackLayout Grid.Column="0" Spacing="4" VerticalOptions="Center">
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="16"
+                            Text="Restart active services"
+                            TextColor="{AppThemeBinding Light={StaticResource OnSurfaceLight}, Dark={StaticResource OnSurfaceDark}}" />
+                        <Label
+                            FontSize="12"
+                            Text="Apply the selected routing mode to active microphone, cast, and receiver streams."
+                            TextColor="{AppThemeBinding Light={StaticResource OnSurfaceVariantLight}, Dark={StaticResource OnSurfaceVariantDark}}" />
+                    </VerticalStackLayout>
+                    <Button
+                        Grid.Column="1"
+                        Style="{StaticResource OutlinedButton}"
+                        Padding="16,8"
+                        Command="{Binding RestartServicesCommand}"
+                        FontSize="14"
+                        Text="Restart"
+                        VerticalOptions="Center" />
+                </Grid>
+            </Border>
+
+        </Grid>
+    </ScrollView>
+</ContentPage>
